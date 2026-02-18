@@ -1,0 +1,64 @@
+Basics of python :learnt baisc of python like data types,functions,loops,conditional statements,class objects,String operations , data strcutures , etc
+
+Problem Statement: Simple Chat Log Analyzer
+Given chat messages:
+Count messages per user
+Detect most active user
+Find average message length
+
+Program:
+#count messages per user
+def count_messages(chats):
+    count = {}
+    for i in chats:
+        name, message = i.split(":", 1)
+         #  parts = i.split(":")
+         # user = parts[0].strip()
+         # message = parts[1].strip()
+        name = name.strip()
+        message = message.strip()
+        if name in count:
+            count[name] += 1
+        else:
+            count[name] = 1
+    return count
+
+#  most active user
+def active_user(count):
+    max = 0
+    active = ""
+    for h in count:
+        if count[h] > max:
+            max = count[h]
+            active = h
+    return active
+
+# calculate avg  message len
+def av_message_len(chats):
+    length = 0
+    for ch in chats:
+        name, message = ch.split(":")
+        message = message.strip()
+        length += len(message)
+    return length / len(chats)
+
+chats = ["madhura: Hi","mayuri: Hello","madhura: what are you doing?","mayuri: nothing",
+    "madhura: Great","palak:byee"]
+message_count = count_messages(chats)
+print("Messages per user:")
+for j in message_count:
+    print(j, "sent", message_count[j], "messages")
+
+print("Most active user is:", active_user(message_count))
+
+avg = av_message_len(chats)
+print("Average message length is:",avg)
+
+OUTPUT:
+python demo.py 
+Messages per user:
+madhura sent 3 messages
+mayuri sent 2 messages
+palak sent 1 messages
+Most active user is: madhura
+Average message length is: 7.0
