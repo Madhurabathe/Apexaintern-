@@ -1,0 +1,45 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd
+
+driver = webdriver.Chrome()
+wait = WebDriverWait(driver,20)
+
+driver.get("https://www.imdb.com/chart/moviemeter/")
+
+# wait for movie cards
+wait.until(
+    EC.presence_of_all_elements_located(
+        (By.XPATH,"//li[contains(@class,'ipc-metadata-list-summary-item')]")
+    )
+)
+
+movies = driver.find_elements(
+    By.XPATH,"//li[contains(@class,'ipc-metadata-list-summary-item')]"
+)
+
+data = []
+
+for movie in movies:
+
+    title = movie.find_element(By.XPATH,".//h3").text
+
+    rating_elements = movie.find_elements(
+        By.XPATH,".//span[contains(@class,'ipc-rating-star--rating')]"
+    )
+
+    rating = rating_elements[0].text if rating_elements else "No Rating"
+
+    data.append({
+        "Title": title,
+        "IMDb Rating": rating
+    })
+
+driver.quit()
+
+df = pd.DataFrame(data)
+print(df)
+
+df.to_csv("popular_movies.csv",index=False)
